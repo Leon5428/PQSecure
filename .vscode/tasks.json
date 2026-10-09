@@ -4,30 +4,27 @@
         {
             "label": "PQSecure: configure",
             "type": "process",
-            "command": "C:/msys64/ucrt64/bin/cmake.exe",
+            "command": "cmake",
             "args": [
                 "-S", "${workspaceFolder}",
                 "-B", "${workspaceFolder}/build",
                 "-G", "Ninja",
                 "-DCMAKE_BUILD_TYPE=Debug",
-                "-DCMAKE_CXX_COMPILER=C:/msys64/ucrt64/bin/g++.exe",
-                "-DCMAKE_PREFIX_PATH=C:/msys64/ucrt64"
+                "-DCMAKE_CXX_COMPILER=g++"
             ],
             "options": {
-                "cwd": "${workspaceFolder}",
-                "env": { "PATH": "C:\\msys64\\ucrt64\\bin;${env:PATH}" }
+                "cwd": "${workspaceFolder}"
             },
             "problemMatcher": []
         },
         {
             "label": "PQSecure: build",
             "type": "process",
-            "command": "C:/msys64/ucrt64/bin/cmake.exe",
-            "args": ["--build", "${workspaceFolder}/build", "--target", "ml_kem_768_demo"],
+            "command": "cmake",
+            "args": ["--build", "${workspaceFolder}/build"],
             "dependsOn": ["PQSecure: configure"],
             "options": {
-                "cwd": "${workspaceFolder}",
-                "env": { "PATH": "C:\\msys64\\ucrt64\\bin;${env:PATH}" }
+                "cwd": "${workspaceFolder}"
             },
             "problemMatcher": ["$gcc"],
             "group": { "kind": "build", "isDefault": true }

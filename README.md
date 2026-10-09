@@ -9,17 +9,29 @@ ML-KEM 对无效密文使用“隐式拒绝”：解封装可以返回成功，�
 
 ### Windows 原生环境
 
-当前使用 MSYS2 UCRT64 的 GCC、liboqs、CMake 和 Ninja。请确保 `C:\msys64\ucrt64\bin` 在 PowerShell 的 PATH 中，以便找到编译器、构建工具和运行时 DLL。
+双方各自在本机安装 MSYS2 UCRT64 的 GCC、liboqs、CMake、Ninja 和 GDB，安装目录可以不同。在 MSYS2 UCRT64 终端安装这些包：
+
+```sh
+pacman -S --needed mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-liboqs mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-ninja mingw-w64-ucrt-x86_64-gdb
+```
+
+将各自实际的 `<MSYS2安装目录>\ucrt64\bin` 加入 Windows 用户 PATH，并完全退出再重新打开 VS Code。共享配置通过 PATH 查找工具和运行时 DLL，不包含任何人的安装目录。应优先使用同一 UCRT64 环境中的工具和库，避免混用其他 GCC、MSVC 或其他架构的库。
+
+在 PowerShell 中使用 `Get-Command cmake,g++,ninja,gdb` 检查命中的工具位置。VS Code 调试还需要安装 Microsoft C/C++ 扩展。
 
 在仓库根目录执行：
 
 ```powershell
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=C:/msys64/ucrt64/bin/g++.exe -DCMAKE_PREFIX_PATH=C:/msys64/ucrt64
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++
 cmake --build build
 .\build\ml_kem_768_demo.exe
 ```
 
-如果 MSYS2 安装在其他位置，请相应调整路径。首次选择编译器后，不要在同一个构建目录中混用其他工具链。
+使用同一 UCRT64 安装中的 CMake 时，会搜索其安装前缀下的 liboqs 配置。如果 liboqs 单独安装在其他目录，请在自己的用户环境变量 `CMAKE_PREFIX_PATH` 中填写它的安装前缀（包含 `include` 和 `lib` 的目录）；也可在命令行用 `-Dliboqs_DIR=...` 指定包含 `liboqsConfig.cmake` 的目录。个人路径无需提交到仓库。
+
+`build/` 中的 CMake 缓存会保存本机绝对路径，因此每人应独立构建，不要共享或提交该目录。移动项目、移动依赖或更换编译器后，需要重新生成干净的构建目录。
+
+VS Code 中选择 `PQSecure: ML-KEM-768 demo`，按 F5 即可配置、构建并调试。构建任务会构建所有默认目标；以后增加可执行目标时无需为每个目标新增构建任务，但调试新程序仍需对应的启动配置。该调试配置使用 GDB；其他工具链需要匹配的调试器配置。
 
 预期输出：
 

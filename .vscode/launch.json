@@ -5,16 +5,17 @@
             "name": "PQSecure: ML-KEM-768 demo",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/ml_kem_768_demo.exe",
+            "program": "${workspaceFolder}/build/ml_kem_768_demo",
+            "windows": {
+                "program": "${workspaceFolder}/build/ml_kem_768_demo.exe"
+            },
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
-            "environment": [
-                { "name": "PATH", "value": "C:\\msys64\\ucrt64\\bin;${env:PATH}" }
-            ],
+            "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
+            "miDebuggerPath": "gdb",
             "preLaunchTask": "PQSecure: build"
         }
     ]
